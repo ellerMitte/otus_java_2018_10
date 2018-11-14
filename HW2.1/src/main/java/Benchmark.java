@@ -1,11 +1,12 @@
 
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
  * @author Igor on 14.11.18.
  */
 public class Benchmark {
-    private final int size;
+    private int size;
     private Object[] array;
 
     public Benchmark() {
@@ -16,15 +17,23 @@ public class Benchmark {
         this.size = size;
     }
 
-    public void measure(Supplier<Object> supplier, String desc) throws InterruptedException {
+    public void setSize(int size) {
+        this.size = size;
+    }
 
-        //long refSize = getMemChanges(() -> {array = new Object[size];});
+    public void measure(Supplier<Object> supplier, String desc, int... sizeArray) throws InterruptedException {
+
         array = new Object[size];
 
-        long elemSize = getMemChanges(() -> {for (int i = 0; i < array.length; i++) {
-            array[i] = supplier.get();
-        }});
-        System.out.println(desc + " size: " + Math.round((double)elemSize / array.length));
+        long elemSize = getMemChanges(() -> {
+            for (int i = 0; i < array.length; i++) {
+                array[i] = supplier.get();
+            }
+        });
+        System.out.println(desc + " size: " + Math.round((double) elemSize / array.length) + " bytes");
+        if (sizeArray.length != 0) {
+            System.out.println("  " + ((List) array[0]).get(0).getClass().getSimpleName() + " size: " + Math.round((double) elemSize / (array.length * sizeArray[0])) + " bytes");
+        }
 
         array = null;
 
