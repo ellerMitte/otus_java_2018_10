@@ -19,7 +19,7 @@
     <!--parent>*</parent-->
 
     <groupId>ru.otus</groupId>
-    <artifactId>L01.1-maven</artifactId>
+    <artifactId>HW1.1-maven</artifactId>
     <version>2018-10</version>
 
     <properties>
