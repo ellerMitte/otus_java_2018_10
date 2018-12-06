@@ -36,14 +36,13 @@ public class TestLauncher {
     }
 
     private static boolean invokeMethods(Object testObject, Method[] methods) {
-        boolean isSuccess = true;
         for (Method method : methods) {
             if (!ReflectionHelper.callMethod(testObject, method)) {
-                isSuccess = false;
                 System.out.println("method @Before " + method.getName() + " threw an exception, the test is not done.");
+                return false;
             }
         }
-        return isSuccess;
+        return true;
     }
 
     private static Method[] getListMethods(Class<? extends Annotation> clazz, Method[] methodsPublic) {
