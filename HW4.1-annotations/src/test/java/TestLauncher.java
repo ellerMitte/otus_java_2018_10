@@ -26,17 +26,24 @@ public class TestLauncher {
         Method[] testMethods = getListMethods(Test.class, methodsPublic);
         Method[] afterMethods = getListMethods(After.class, methodsPublic);
 
-        Object testObject = ReflectionHelper.instantiate(testClazz);
-
         Arrays.stream(testMethods).forEach(testMethod -> {
-            invokeMethods(testObject, beforeMethods);
-            ReflectionHelper.callMethod(testObject, testMethod.getName());
-            invokeMethods(testObject, afterMethods);
+            Object testObject = ReflectionHelper.instantiate(testClazz);
+            if (invokeMethods(testObject, beforeMethods)) {
+                ReflectionHelper.callMethod(testObject, testMethod);
+                invokeMethods(testObject, afterMethods);
+            }
         });
     }
 
-    private static void invokeMethods(Object testObject, Method[] methods) {
-        Arrays.stream(methods).forEach(method -> ReflectionHelper.callMethod(testObject, method.getName()));
+    private static boolean invokeMethods(Object testObject, Method[] methods) {
+        boolean isSuccess = true;
+        for (Method method : methods) {
+            if (!ReflectionHelper.callMethod(testObject, method)) {
+                isSuccess = false;
+                System.out.println("method @Before " + method.getName() + " threw an exception, the test is not done.");
+            }
+        }
+        return isSuccess;
     }
 
     private static Method[] getListMethods(Class<? extends Annotation> clazz, Method[] methodsPublic) {

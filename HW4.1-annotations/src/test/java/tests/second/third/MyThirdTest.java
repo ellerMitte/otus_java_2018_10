@@ -7,7 +7,7 @@ import annotations.Test;
 public class MyThirdTest {
 
     public MyThirdTest() {
-        System.out.println("Call of the constructor  " + this.getClass().getSimpleName());
+        System.out.println("----------------\n" + "Call of the constructor  " + this.getClass().getSimpleName());
     }
 
     @Before

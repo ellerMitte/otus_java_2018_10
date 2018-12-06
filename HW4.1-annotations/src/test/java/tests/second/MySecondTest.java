@@ -4,10 +4,12 @@ import annotations.After;
 import annotations.Before;
 import annotations.Test;
 
+import java.util.IllegalFormatException;
+
 public class MySecondTest {
 
     public MySecondTest() {
-        System.out.println("Call of the constructor  " + this.getClass().getSimpleName());
+        System.out.println("----------------\n" + "Call of the constructor  " + this.getClass().getSimpleName());
     }
 
     @Before

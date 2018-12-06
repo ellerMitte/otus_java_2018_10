@@ -61,7 +61,7 @@ public class ReflectionHelper {
         }
     }
 
-    public static Object callMethod(Object object, String name, Object... args) {
+    public static Object callMethodByName(Object object, String name, Object... args) {
         Method method = null;
 
         try {
@@ -77,6 +77,16 @@ public class ReflectionHelper {
             }
         }
         return null;
+    }
+
+    public static boolean callMethod(Object object, Method method) {
+        try {
+            method.invoke(object);
+            return true;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static Class<?>[] toClasses(Object[] args) {
