@@ -4,6 +4,7 @@ import annotations.After;
 import annotations.Before;
 import annotations.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.IllegalFormatException;
 
 public class MySecondTest {
@@ -15,6 +16,7 @@ public class MySecondTest {
     @Before
     public void before1(){
         System.out.println("Before1 " + this.getClass().getSimpleName());
+//        throw new IllegalArgumentException();
     }
 
     @Before

@@ -8,8 +8,7 @@ import org.reflections.util.ClasspathHelper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Igor on 03.12.18.
@@ -36,13 +35,16 @@ public class TestLauncher {
     }
 
     private static boolean invokeMethods(Object testObject, Method[] methods) {
-        for (Method method : methods) {
-            if (!ReflectionHelper.callMethod(testObject, method)) {
-                System.out.println("method @Before " + method.getName() + " threw an exception, the test is not done.");
-                return false;
-            }
-        }
-        return true;
+
+        return Arrays.stream(methods).allMatch(method -> ReflectionHelper.callMethod(testObject, method));
+
+//        for (Method method : methods) {
+//            if (!ReflectionHelper.callMethod(testObject, method)) {
+//                System.out.println("method @Before " + method.getName() + " threw an exception, the test is not done.");
+//                return false;
+//            }
+//        }
+//        return true;
     }
 
     private static Method[] getListMethods(Class<? extends Annotation> clazz, Method[] methodsPublic) {
@@ -54,6 +56,5 @@ public class TestLauncher {
         Set<String> classes = reflections.getAllTypes();
         classes.forEach(TestLauncher::launch);
     }
-
 
 }
