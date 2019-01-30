@@ -12,8 +12,6 @@ public class OperationExecutor {
     }
 
     public void executeCommands() {
-        commands.forEach(cmd -> {
-            cmd.execute();
-        });
+        commands.forEach(Operation::execute);
     }
 }

@@ -50,7 +50,7 @@ public class ATM {
     }
 
     public int getBalance() {
-        return cassettes.stream().mapToInt(cassete -> cassete.getBalance()).sum();
+        return cassettes.stream().mapToInt(Cassette::getBalance).sum();
     }
 
     public void readBalance() {
