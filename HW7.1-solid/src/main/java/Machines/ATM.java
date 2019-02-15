@@ -1,5 +1,6 @@
 package Machines;
 
+import Exceptions.DepositException;
 import Exceptions.WithdrawException;
 import operations.OperationExecutor;
 import operations.GetMoney;
@@ -14,10 +15,17 @@ public class ATM {
         this.cassettes = cassettes;
     }
 
-    public void deposit(int value, int count) {
-        Cassette cassette = cassettes.stream().filter(cas -> value == cas.getBanknoteFaceValue()).findFirst().get();
-        cassette.put(count);
-        System.out.println("вы положили " + value * count + " руб.");
+    public void deposit(int value, int count) throws DepositException {
+        Cassette cassette = cassettes.stream()
+                .filter(cas -> value == cas.getBanknoteFaceValue())
+                .findFirst().orElse(null);
+        if (cassette != null) {
+            cassette.put(count);
+            System.out.println("вы положили " + value * count + " руб.");
+        }else {
+            throw new DepositException("банкомат не принимает купюры такого достоинства " + value + " руб.");
+        }
+
     }
 
     public void withdraw(int sum) throws WithdrawException {
@@ -26,7 +34,7 @@ public class ATM {
 
         int testSum = sum;
         if (sum > getBalance()) {
-            throw new WithdrawException("в банкомате не хватает денег для запрошенной суммы");
+            throw new WithdrawException("в банкомате не хватает денег для запрошенной суммы в " + sum + " руб.");
         }
 
         for (Cassette cassete : cassettes) {
@@ -43,9 +51,9 @@ public class ATM {
         }
         if (testSum == 0) {
             executor.executeCommands();
-            System.out.println("выдано " + sum + "руб.");
+            System.out.println("выдано " + sum + " руб.");
         } else {
-            throw new WithdrawException("нельзя снять такую сумму");
+            throw new WithdrawException("невозможно снять сумму в " + sum + " руб.");
         }
     }
 
@@ -54,7 +62,7 @@ public class ATM {
     }
 
     public void readBalance() {
-        System.out.println("в банкомате = " + getBalance() + " р");
+        System.out.println("в банкомате " + getBalance() + " руб.");
     }
 
     public static void main(String[] args) {
@@ -66,17 +74,26 @@ public class ATM {
         ATM atm = new ATM(cassettes);
         atm.readBalance();
         try {
-            atm.withdraw(56000);
+            atm.withdraw(54000);
         } catch (WithdrawException e) {
             e.printStackTrace();
         }
         atm.readBalance();
-        atm.deposit(5000, 2);
+        try {
+            atm.deposit(4000, 2);
+        } catch (DepositException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            atm.deposit(5000, 2);
+        } catch (DepositException e) {
+            System.out.println(e.getMessage());
+        }
         atm.readBalance();
         try {
             atm.withdraw(7000);
         } catch (WithdrawException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         atm.readBalance();
     }

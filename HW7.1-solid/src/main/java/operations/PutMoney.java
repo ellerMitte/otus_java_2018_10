@@ -15,6 +15,6 @@ public class PutMoney implements Operation {
     @Override
     public void execute() {
         cassette.put(count);
-        System.out.println("{внесено " + count + " купюр номиналом " + cassette.getBanknoteFaceValue() + " руб.}");
+        System.out.println("{внесено " + count + " ед. номиналом " + cassette.getBanknoteFaceValue() + " руб.}");
     }
 }
