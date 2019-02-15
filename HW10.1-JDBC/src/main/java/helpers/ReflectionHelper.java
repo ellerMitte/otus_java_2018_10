@@ -1,6 +1,7 @@
 package helpers;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,15 +18,22 @@ public class ReflectionHelper {
     }
 
     public static <T> T instantiate(Class<T> type, Object... args) {
+        Constructor<T> constructor = null;
         try {
             if (args.length == 0) {
                 return type.getDeclaredConstructor().newInstance();
             } else {
                 Class<?>[] classes = toClasses(args);
-                return type.getDeclaredConstructor(classes).newInstance(args);
+                constructor = type.getDeclaredConstructor(classes);
+                constructor.setAccessible(true);
+                return constructor.newInstance(args);
             }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
+        } finally {
+            if (constructor != null && !constructor.isAccessible()) {
+                constructor.setAccessible(false);
+            }
         }
 
         return null;

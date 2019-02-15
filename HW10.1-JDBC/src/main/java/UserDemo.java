@@ -20,10 +20,14 @@ public class UserDemo {
         UserExecutor demo = new UserExecutorImpl();
 
         demo.createTable();
-        demo.saveUsers(new User(0L,"insertUser", 88));
-        System.out.println(demo.getUser(1L));
-
-        demo.saveUsers(new User(1L,"updateUser", 14));
-        System.out.println(demo.getUser(1L));
+        User user = new User("insertUser", 88);
+        demo.saveUsers(user);
+        user = demo.getUser(1L);
+        System.out.println(user);
+        user.setName("updateUser");
+        user.setAge(14);
+        demo.saveUsers(user);
+        user = demo.getUser(1L);
+        System.out.println(user);
     }
 }

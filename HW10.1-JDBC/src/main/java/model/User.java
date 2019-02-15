@@ -7,12 +7,17 @@ import dbservice.annotations.Id;
  */
 public class User {
     @Id
-    private final long id;
-    private final String name;
-    private final int age;
+    private long id;
+    private String name;
+    private int age;
 
-    public User(Long id, String name, Integer age) {
+    private User(Long id, String name, Integer age) {
         this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public User(String name, Integer age) {
         this.name = name;
         this.age = age;
     }
@@ -27,6 +32,14 @@ public class User {
 
     public int getAge() {
         return age;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override
