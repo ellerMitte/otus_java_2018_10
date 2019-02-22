@@ -12,6 +12,7 @@ import java.util.List;
 public class Person implements Serializable {
     public final int age;
     public final String name;
+    public final Phone phone = new Phone(12, "322-22-33");
     public int[] array = new int[5];
     public List<String> list = new ArrayList<>();
     private transient final String hidden = "hiddenField"; //transient - поле будет пропущено при сериализации

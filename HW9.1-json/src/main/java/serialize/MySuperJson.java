@@ -4,10 +4,7 @@ import helpers.ReflectionHelper;
 
 import javax.json.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * @author Igor on 21.02.19.
@@ -24,14 +21,15 @@ public class MySuperJson {
                 .forEach(field -> {
                     Object fieldValue = ReflectionHelper.getFieldValue(obj, field);
                     if (fieldValue == null)
-                        ;
-//                        continue;
-                    else if (fieldValue.getClass().isArray() || fieldValue instanceof Collection)
-                        jsonStructure.add(field.getName(), Json.createArrayBuilder(new ArrayList<>()).build());
-                    else if (fieldValue instanceof Number)
-                        jsonStructure.add(field.getName(), Integer.valueOf(fieldValue.toString()));
-                    else
+                        jsonStructure.addNull(null);
+                    else if (fieldValue.getClass().isArray())
+                        jsonStructure.add(field.getName(), Json.createArrayBuilder((JsonArray) fieldValue).build());
+                    else if (fieldValue instanceof Collection)
+                        jsonStructure.add(field.getName(), Json.createArrayBuilder((List) fieldValue).build());
+                    else if (fieldValue instanceof Number || fieldValue instanceof String)
                         jsonStructure.add(field.getName(), fieldValue.toString());
+                    else
+                        jsonStructure.add(field.getName(), create(fieldValue));
                 });
 
         return jsonStructure.build();
@@ -45,4 +43,15 @@ public class MySuperJson {
 //                                .add("number", "222-222-2222")))
 //                .build();
     }
+
+    private static JsonStructure ObjectBuilder(Object obj) {
+        return Json.createObjectBuilder()
+                .add(Object.class.getSimpleName(), obj.toString()).build();
+    }
+
+//    private static JsonStructure ArrayBuilder(Object[] obj) {
+//
+//        return Json.createArrayBuilder()
+//                .add(Object.class.getSimpleName(), obj).build();
+//    }
 }
