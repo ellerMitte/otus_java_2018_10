@@ -1,11 +1,10 @@
 package helpers;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by tully.
@@ -65,6 +64,17 @@ public class ReflectionHelper {
             if (field != null && !field.isAccessible()) {
                 field.setAccessible(false);
             }
+        }
+        return null;
+    }
+
+    public static List<Object> getListFromArray(Object array) {
+        if (array.getClass().isArray()) {
+            List<Object> objectList = new ArrayList<>();
+            for (int i = 0; i < Array.getLength(array); i++) {
+                objectList.add(Array.get(array, i));
+            }
+            return objectList;
         }
         return null;
     }

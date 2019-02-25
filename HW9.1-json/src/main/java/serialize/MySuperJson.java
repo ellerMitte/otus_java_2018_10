@@ -3,7 +3,7 @@ package serialize;
 import helpers.ReflectionHelper;
 
 import javax.json.*;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -16,42 +16,67 @@ public class MySuperJson {
     }
 
     private static JsonStructure create(Object obj) {
+        if (obj.getClass().isArray())
+            return createArrayBuilder(ReflectionHelper.getListFromArray(obj));
+        else if (obj instanceof Collection)
+            return createArrayBuilder((List) obj);
+        else
+            return createObjectBuilder(obj);
+    }
+
+    private static JsonStructure createObjectBuilder(Object obj) {
         JsonObjectBuilder jsonStructure = Json.createObjectBuilder();
         Arrays.stream(ReflectionHelper.getFields(obj))
                 .forEach(field -> {
                     Object fieldValue = ReflectionHelper.getFieldValue(obj, field);
+                    if (Modifier.isTransient(field.getModifiers()))
+                        return;
+
                     if (fieldValue == null)
                         jsonStructure.addNull(null);
                     else if (fieldValue.getClass().isArray())
-                        jsonStructure.add(field.getName(), Json.createArrayBuilder((JsonArray) fieldValue).build());
+                        jsonStructure.add(field.getName(), createArrayBuilder(ReflectionHelper.getListFromArray(fieldValue)));
                     else if (fieldValue instanceof Collection)
-                        jsonStructure.add(field.getName(), Json.createArrayBuilder((List) fieldValue).build());
-                    else if (fieldValue instanceof Number || fieldValue instanceof String)
+                        jsonStructure.add(field.getName(), createArrayBuilder((List) fieldValue));
+                    else if (fieldValue instanceof Integer || fieldValue instanceof Short)
+                        jsonStructure.add(field.getName(), Integer.valueOf(fieldValue.toString()));
+                    else if (fieldValue instanceof Long)
+                        jsonStructure.add(field.getName(), (long) fieldValue);
+                    else if (fieldValue instanceof Double || fieldValue instanceof Float)
+                        jsonStructure.add(field.getName(), Double.valueOf(fieldValue.toString()));
+                    else if (fieldValue instanceof Boolean)
+                        jsonStructure.add(field.getName(), (boolean) fieldValue);
+                    else if (fieldValue instanceof String)
                         jsonStructure.add(field.getName(), fieldValue.toString());
                     else
-                        jsonStructure.add(field.getName(), create(fieldValue));
+                        jsonStructure.add(field.getName(), createObjectBuilder(fieldValue));
                 });
 
         return jsonStructure.build();
-//        return Json.createObjectBuilder()
-//                .add("firstName", "Duke")
-//                .add("age", 28)
-//                .add("streetAddress", "100 Internet Dr")
-//                .add("phoneNumbers", Json.createArrayBuilder()
-//                        .add(Json.createObjectBuilder()
-//                                .add("type", "home")
-//                                .add("number", "222-222-2222")))
-//                .build();
     }
 
-    private static JsonStructure ObjectBuilder(Object obj) {
-        return Json.createObjectBuilder()
-                .add(Object.class.getSimpleName(), obj.toString()).build();
+    private static JsonStructure createArrayBuilder(List<Object> objArray) {
+        JsonArrayBuilder jsonStructure = Json.createArrayBuilder();
+        objArray.forEach(obj -> {
+                    if (obj == null)
+                        jsonStructure.addNull();
+                    else if (obj.getClass().isArray())
+                        jsonStructure.add(createArrayBuilder(ReflectionHelper.getListFromArray(obj)));
+                    else if (obj instanceof Collection)
+                        jsonStructure.add(createArrayBuilder((List) obj));
+                    else if (obj instanceof Integer || obj instanceof Short)
+                        jsonStructure.add(Integer.valueOf(obj.toString()));
+                    else if (obj instanceof Long)
+                        jsonStructure.add((long) obj);
+                    else if (obj instanceof Double || obj instanceof Float)
+                        jsonStructure.add(Double.valueOf(obj.toString()));
+                    else if (obj instanceof Boolean)
+                        jsonStructure.add((boolean) obj);
+                    else if (obj instanceof String)
+                        jsonStructure.add(obj.toString());
+                    else
+                        jsonStructure.add(createObjectBuilder(obj));
+                });
+        return jsonStructure.build();
     }
-
-//    private static JsonStructure ArrayBuilder(Object[] obj) {
-//
-//        return Json.createArrayBuilder()
-//                .add(Object.class.getSimpleName(), obj).build();
-//    }
 }
