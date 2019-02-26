@@ -12,7 +12,26 @@ import java.util.*;
 public class MySuperJson {
 
     public String toJson(Object obj) {
+        if (obj == null) {
+            return "null";
+        }
         return create(obj).toString();
+    }
+
+    public String toJson(boolean obj) {
+        return String.valueOf(obj);
+    }
+
+    public String toJson(int obj) {
+        return String.valueOf(obj);
+    }
+
+    public String toJson(long obj) {
+        return String.valueOf(obj);
+    }
+
+    public String toJson(double obj) {
+        return String.valueOf(obj);
     }
 
     private static JsonStructure create(Object obj) {
@@ -38,7 +57,7 @@ public class MySuperJson {
                         jsonStructure.add(field.getName(), createArrayBuilder(ReflectionHelper.getListFromArray(fieldValue)));
                     else if (fieldValue instanceof Collection)
                         jsonStructure.add(field.getName(), createArrayBuilder((List) fieldValue));
-                    else if (fieldValue instanceof Integer || fieldValue instanceof Short)
+                    else if (fieldValue instanceof Integer || fieldValue instanceof Short || obj instanceof Byte)
                         jsonStructure.add(field.getName(), Integer.valueOf(fieldValue.toString()));
                     else if (fieldValue instanceof Long)
                         jsonStructure.add(field.getName(), (long) fieldValue);
@@ -46,7 +65,7 @@ public class MySuperJson {
                         jsonStructure.add(field.getName(), Double.valueOf(fieldValue.toString()));
                     else if (fieldValue instanceof Boolean)
                         jsonStructure.add(field.getName(), (boolean) fieldValue);
-                    else if (fieldValue instanceof String)
+                    else if (fieldValue instanceof String || obj instanceof Character)
                         jsonStructure.add(field.getName(), fieldValue.toString());
                     else
                         jsonStructure.add(field.getName(), createObjectBuilder(fieldValue));
@@ -58,25 +77,25 @@ public class MySuperJson {
     private static JsonStructure createArrayBuilder(List<Object> objArray) {
         JsonArrayBuilder jsonStructure = Json.createArrayBuilder();
         objArray.forEach(obj -> {
-                    if (obj == null)
-                        jsonStructure.addNull();
-                    else if (obj.getClass().isArray())
-                        jsonStructure.add(createArrayBuilder(ReflectionHelper.getListFromArray(obj)));
-                    else if (obj instanceof Collection)
-                        jsonStructure.add(createArrayBuilder((List) obj));
-                    else if (obj instanceof Integer || obj instanceof Short)
-                        jsonStructure.add(Integer.valueOf(obj.toString()));
-                    else if (obj instanceof Long)
-                        jsonStructure.add((long) obj);
-                    else if (obj instanceof Double || obj instanceof Float)
-                        jsonStructure.add(Double.valueOf(obj.toString()));
-                    else if (obj instanceof Boolean)
-                        jsonStructure.add((boolean) obj);
-                    else if (obj instanceof String)
-                        jsonStructure.add(obj.toString());
-                    else
-                        jsonStructure.add(createObjectBuilder(obj));
-                });
+            if (obj == null)
+                jsonStructure.addNull();
+            else if (obj.getClass().isArray())
+                jsonStructure.add(createArrayBuilder(ReflectionHelper.getListFromArray(obj)));
+            else if (obj instanceof Collection)
+                jsonStructure.add(createArrayBuilder((List) obj));
+            else if (obj instanceof Integer || obj instanceof Short || obj instanceof Byte)
+                jsonStructure.add(Integer.valueOf(obj.toString()));
+            else if (obj instanceof Long)
+                jsonStructure.add((long) obj);
+            else if (obj instanceof Double || obj instanceof Float)
+                jsonStructure.add(Double.valueOf(obj.toString()));
+            else if (obj instanceof Boolean)
+                jsonStructure.add((boolean) obj);
+            else if (obj instanceof String || obj instanceof Character)
+                jsonStructure.add(obj.toString());
+            else
+                jsonStructure.add(createObjectBuilder(obj));
+        });
         return jsonStructure.build();
     }
 }

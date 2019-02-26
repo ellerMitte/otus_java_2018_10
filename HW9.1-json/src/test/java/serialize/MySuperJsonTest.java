@@ -44,4 +44,14 @@ public class MySuperJsonTest {
         TypeToken<List<Person>> token = new TypeToken<List<Person>>() {};
         Assert.assertEquals(personList, gson.fromJson(myJson.toJson(personList), token.getType()));
     }
+
+    @Test
+    public void customTest() {
+        Assert.assertEquals(gson.toJson(null), myJson.toJson(null));
+        Assert.assertEquals(gson.toJson(1), myJson.toJson(1));
+        Assert.assertEquals(gson.toJson(1d), myJson.toJson(1d));
+        Assert.assertEquals(gson.toJson(false), myJson.toJson(false));
+        Assert.assertEquals(gson.toJson(new byte[] {1, 2, 3}), myJson.toJson(new byte[] {1, 2, 3}));
+        Assert.assertEquals(gson.toJson(new char[] {1, 2, 3}), myJson.toJson(new char[] {1, 2, 3}));
+    }
 }
