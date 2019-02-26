@@ -62,6 +62,7 @@ public class Launcher {
         atmDepartment.printBalance();
 
         atmDepartment.restoreState();
+        System.out.println("после восстановления начального состояния");
 
         atmDepartment.printBalance();
 
