@@ -53,5 +53,7 @@ public class MySuperJsonTest {
         Assert.assertEquals(gson.toJson(false), myJson.toJson(false));
         Assert.assertEquals(gson.toJson(new byte[] {1, 2, 3}), myJson.toJson(new byte[] {1, 2, 3}));
         Assert.assertEquals(gson.toJson(new char[] {1, 2, 3}), myJson.toJson(new char[] {1, 2, 3}));
+        Assert.assertEquals(gson.toJson('a'), myJson.toJson('a'));
+        Assert.assertEquals(gson.toJson("A"), myJson.toJson("A"));
     }
 }

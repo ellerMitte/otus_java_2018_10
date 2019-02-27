@@ -14,24 +14,15 @@ public class MySuperJson {
     public String toJson(Object obj) {
         if (obj == null) {
             return "null";
+        } else if (obj instanceof String) {
+            return Json.createValue((String) obj).toString();
+        } else if (obj instanceof Character) {
+            return Json.createValue(String.valueOf(obj)).toString();
+        } else if (obj instanceof Boolean || obj instanceof Number) {
+            return String.valueOf(obj);
         }
+
         return create(obj).toString();
-    }
-
-    public String toJson(boolean obj) {
-        return String.valueOf(obj);
-    }
-
-    public String toJson(int obj) {
-        return String.valueOf(obj);
-    }
-
-    public String toJson(long obj) {
-        return String.valueOf(obj);
-    }
-
-    public String toJson(double obj) {
-        return String.valueOf(obj);
     }
 
     private static JsonStructure create(Object obj) {
