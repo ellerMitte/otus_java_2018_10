@@ -16,4 +16,7 @@ public class UserService {
                 .orElse(false);
     }
 
+    public boolean authenticateAdmin(String name, String password) {
+        return "admin".equals(name) && "admin".equals(password);
+    }
 }

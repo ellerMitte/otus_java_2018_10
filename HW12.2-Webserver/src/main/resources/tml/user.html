@@ -4,10 +4,16 @@
 </head>
 <body>
 <div class="top">
-    <img src="logo.png"/>
     <br/>
     <a href="user">users</a>
 </div>
+<form action="/admin/user" method="post">
+    Name:<br>
+    <input type="text" name="name" value="user"><br>
+    Password:<br>
+    <input type="text" name="password" value="pass"><br><br>
+    <input type="submit" value="Submit">
+</form>
 <ul>
     <#list users as user>
         <li>${user.name}</li>

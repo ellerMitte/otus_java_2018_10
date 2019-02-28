@@ -1,5 +1,7 @@
 package filter;
 
+import server.TemplateProcessor;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +16,14 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        if (httpRequest.getSession(false) != null) {
+        if (httpRequest.getSession(false) != null
+                || ("POST".equals(httpRequest.getMethod())&& "/admin".equals(httpRequest.getRequestURI()))) {
             filterChain.doFilter(servletRequest, servletResponse);
-        }else {
-            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+            TemplateProcessor templateProcessor = new TemplateProcessor();
+            servletResponse.setContentType("text/html;charset=utf-8");
+            servletResponse.getWriter().println(templateProcessor.getPage("login.html", null));
+            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
         }
     }
 

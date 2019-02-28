@@ -11,7 +11,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import servlet.AdminServlet;
-import servlet.LoginServlet;
 import servlet.UserServlet;
 
 import java.io.BufferedReader;
@@ -39,10 +38,10 @@ public class Main {
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new AdminServlet()), "/admin");
-        context.addServlet(new ServletHolder(new UserServlet(new InMemoryUserDao())), "/user");
-        context.addServlet(new ServletHolder(new LoginServlet(new UserService(new InMemoryUserDao()))), "/login");
-        context.addFilter(new FilterHolder(new AuthFilter()), "/user", null);
+        context.addServlet(new ServletHolder(new AdminServlet(new UserService(new InMemoryUserDao()))), "/admin");
+        context.addServlet(new ServletHolder(new UserServlet(new InMemoryUserDao())), "/admin/user");
+//        context.addServlet(new ServletHolder(new LoginServlet(new UserService(new InMemoryUserDao()))), "/login");
+        context.addFilter(new FilterHolder(new AuthFilter()), "/admin/*", null);
 
         Server server = new Server(PORT);
         server.setHandler(new HandlerList(resourceHandler, context));
