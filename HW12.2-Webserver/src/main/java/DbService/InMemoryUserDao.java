@@ -1,4 +1,6 @@
-package model;
+package DbService;
+
+import model.User;
 
 import java.util.HashMap;
 import java.util.List;

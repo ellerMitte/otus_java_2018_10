@@ -1,5 +1,7 @@
 package model;
 
+import DbService.UserDao;
+
 import java.util.Optional;
 
 public class UserService {

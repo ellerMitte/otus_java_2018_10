@@ -1,9 +1,21 @@
 package model;
 
-public class User {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-    private final String name;
-    private final String password;
+@Entity
+@Table(name = "user")
+public class User {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private String password;
+
+    public User() {
+    }
 
     public User(String name, String password) {
         this.name = name;
@@ -16,5 +28,17 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -1,10 +1,9 @@
 package servlet;
 
 import model.User;
-import model.UserDao;
+import DbService.UserDao;
 import server.TemplateProcessor;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

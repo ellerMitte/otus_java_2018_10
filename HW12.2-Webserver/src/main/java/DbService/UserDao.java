@@ -1,4 +1,6 @@
-package model;
+package DbService;
+
+import model.User;
 
 import java.util.List;
 
