@@ -5,12 +5,12 @@ import Machines.state.Memento;
 import Machines.state.State;
 
 public class Cassette {
-    private final int banknoteFaceValue;
+    private final Banknote banknote;
     private int count;
     private final Memento startState;
 
-    Cassette(int banknoteFaceValue, int count) {
-        this.banknoteFaceValue = banknoteFaceValue;
+    Cassette(Banknote banknote, int count) {
+        this.banknote = banknote;
         this.count = count;
         this.startState = saveStartState(new State(count));
     }
@@ -28,11 +28,11 @@ public class Cassette {
     }
 
     public int getBanknoteFaceValue() {
-        return banknoteFaceValue;
+        return banknote.getNominal();
     }
 
     int getBalance() {
-        return banknoteFaceValue * count;
+        return banknote.getNominal() * count;
     }
 
     public void put(int count) {
@@ -50,7 +50,7 @@ public class Cassette {
     @Override
     public String toString() {
         return "ATM cassette{" +
-                "banknoteFaceValue=" + banknoteFaceValue +
+                "banknote=" + banknote.getNominal() +
                 ", count=" + count +
                 '}';
     }

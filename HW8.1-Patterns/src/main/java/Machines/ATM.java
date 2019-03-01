@@ -98,8 +98,8 @@ public class ATM {
             cassettes = new HashMap<>();
         }
 
-        public Builder addCassete(int faceValue, int count) {
-            Cassette cassette = new Cassette(faceValue, count);
+        public Builder addCassete(Banknote banknote, int count) {
+            Cassette cassette = new Cassette(banknote, count);
             cassettes.put(cassette.getBanknoteFaceValue(), cassette);
             return this;
         }

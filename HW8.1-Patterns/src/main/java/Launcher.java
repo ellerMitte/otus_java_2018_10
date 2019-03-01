@@ -1,6 +1,7 @@
 import Exceptions.DepositException;
 import Exceptions.WithdrawException;
 import Machines.ATM;
+import Machines.Banknote;
 import department.ATMDepartment;
 
 import java.util.HashMap;
@@ -15,15 +16,15 @@ public class Launcher {
 
         ATMDepartment atmDepartment = new ATMDepartment();
         atmDepartment.addATM(ATM.builder()
-                .addCassete(1000, 1)
-                .addCassete(100, 50)
-                .addCassete(5000, 10)
+                .addCassete(Banknote.OneThousand, 1)
+                .addCassete(Banknote.OneHundred, 50)
+                .addCassete(Banknote.FiveThousand, 10)
                 .build());
         atmDepartment.addATM(ATM.builder()
-                .addCassete(500, 100)
-                .addCassete(200, 50)
-                .addCassete(2000, 20)
-                .addCassete(1000, 45)
+                .addCassete(Banknote.FiveThousand, 100)
+                .addCassete(Banknote.FiveHundred, 50)
+                .addCassete(Banknote.TwoThousand, 20)
+                .addCassete(Banknote.OneThousand, 45)
                 .build());
         atmDepartment.printBalance();
         ATM atm1 = atmDepartment.getATM(0);
