@@ -29,36 +29,36 @@ public class Launcher {
         atmDepartment.printBalance();
         ATM atm1 = atmDepartment.getATM(0);
         ATM atm2 = atmDepartment.getATM(1);
-        atm1.readBalance();
+        atm1.printBalance();
         try {
             atm1.withdraw(54000);
         } catch (WithdrawException e) {
             e.printStackTrace();
         }
-        atm1.readBalance();
+        atm1.printBalance();
         try {
-            atm1.deposit(4000, 2);
+            atm1.deposit(Banknote.FiveHundred, 2);
         } catch (DepositException e) {
             System.out.println(e.getMessage());
         }
         try {
-            atm2.deposit(5000, 2);
+            atm2.deposit(Banknote.FiveThousand, 2);
         } catch (DepositException e) {
             System.out.println(e.getMessage());
         }
-        atm2.readBalance();
-        Map<Integer, Integer> money = new HashMap<>();
-        money.put(5000, 100);
-        money.put(200, 50);
-        money.put(50, 300);
-        money.put(1000, 10);
+        atm2.printBalance();
+        Map<Banknote, Integer> money = new HashMap<>();
+        money.put(Banknote.FiveThousand, 100);
+        money.put(Banknote.OneHundred, 50);
+        money.put(Banknote.Fifty, 300);
+        money.put(Banknote.OneThousand, 10);
         atm2.depositMulti(money);
         try {
             atm2.withdraw(7000);
         } catch (WithdrawException e) {
             System.out.println(e.getMessage());
         }
-        atm2.readBalance();
+        atm2.printBalance();
 
         atmDepartment.printBalance();
 

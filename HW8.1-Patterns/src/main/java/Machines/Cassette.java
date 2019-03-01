@@ -27,7 +27,11 @@ public class Cassette {
         return count;
     }
 
-    public int getBanknoteFaceValue() {
+    Banknote getBanknote() {
+        return banknote;
+    }
+
+    public int getBanknoteNominal() {
         return banknote.getNominal();
     }
 

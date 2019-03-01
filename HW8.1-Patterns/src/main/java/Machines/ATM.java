@@ -14,29 +14,29 @@ import java.util.stream.Collectors;
 
 public class ATM {
 
-    private Map<Integer, Cassette> cassettes;
+    private Map<Banknote, Cassette> cassettes;
 
-    private ATM(Map<Integer, Cassette> cassettes) {
+    private ATM(Map<Banknote, Cassette> cassettes) {
         this.cassettes = cassettes;
     }
 
-    public void deposit(int value, int count) throws DepositException {
+    public void deposit(Banknote banknote, int count) throws DepositException {
         try {
-            cassettes.get(value).put(count);
-            System.out.println("вы положили " + value * count + " руб.");
+            cassettes.get(banknote).put(count);
+            System.out.println("вы положили " + banknote.getNominal() * count + " руб.");
         } catch (NullPointerException e) {
-            throw new DepositException("банкомат не принимает купюры такого номинала " + value + " руб.");
+            throw new DepositException("банкомат не принимает купюры номиналом " + banknote.getNominal() + " руб.");
         }
     }
 
-    public void depositMulti(Map<Integer, Integer> money) {
+    public void depositMulti(Map<Banknote, Integer> money) {
         OperationExecutor executor = new OperationExecutor();
         money.forEach((key, value) -> {
             Cassette cassette = cassettes.get(key);
             if (cassette != null) {
                 executor.addCommand(new PutMoney(cassettes.get(key), value));
             } else {
-                System.out.println("возвращено " + value + " купюр номиналом " + key);
+                System.out.println("возвращено " + value + " купюр номиналом " + key.getNominal() + " руб.");
             }
         });
         executor.executeCommands();
@@ -46,7 +46,7 @@ public class ATM {
         OperationExecutor executor = new OperationExecutor();
         List<Cassette> cas = cassettes.entrySet().stream()
                 .map(Map.Entry::getValue)
-                .sorted((cas1, cas2) -> cas2.getBanknoteFaceValue() - cas1.getBanknoteFaceValue())
+                .sorted((cas1, cas2) -> cas2.getBanknoteNominal() - cas1.getBanknoteNominal())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         int testSum = sum;
@@ -55,15 +55,10 @@ public class ATM {
         }
 
         for (Cassette cassete : cas) {
-            if (testSum <= cassete.getBalance()) {
-                executor.addCommand(new GetMoney(cassete, testSum / cassete.getBanknoteFaceValue()));
-                testSum = testSum % cassete.getBanknoteFaceValue();
-                if (testSum == 0) {
-                    break;
-                }
-            } else {
-                executor.addCommand(new GetMoney(cassete, cassete.getCount()));
-                testSum = testSum - cassete.getBalance();
+            if (testSum != 0) {
+                int count = Math.min(testSum / cassete.getBanknoteNominal(), cassete.getCount());
+                executor.addCommand(new GetMoney(cassete, count));
+                testSum = testSum - count * cassete.getBanknoteNominal();
             }
         }
         if (testSum == 0) {
@@ -79,7 +74,7 @@ public class ATM {
                 .mapToInt(value -> value.getValue().getBalance()).sum();
     }
 
-    public void readBalance() {
+    public void printBalance() {
         System.out.println("в банкомате " + getBalance() + " руб.");
     }
 
@@ -92,7 +87,7 @@ public class ATM {
     }
 
     public static class Builder {
-        private Map<Integer, Cassette> cassettes;
+        private Map<Banknote, Cassette> cassettes;
 
         private Builder() {
             cassettes = new HashMap<>();
@@ -100,7 +95,7 @@ public class ATM {
 
         public Builder addCassete(Banknote banknote, int count) {
             Cassette cassette = new Cassette(banknote, count);
-            cassettes.put(cassette.getBanknoteFaceValue(), cassette);
+            cassettes.put(cassette.getBanknote(), cassette);
             return this;
         }
 

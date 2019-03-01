@@ -31,7 +31,7 @@ public class ATMDepartment {
     }
 
     public void printBalance() {
-        System.out.println("баланс по всем АТМ = [" + getBalance() + "]");
+        System.out.println("баланс по всем АТМ = " + getBalance() + " руб.");
     }
 
     public void restoreState() {

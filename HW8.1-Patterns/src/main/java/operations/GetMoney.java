@@ -16,7 +16,7 @@ public class GetMoney implements Operation {
     public void execute() {
         try {
             cassette.take(count);
-            System.out.println("{выдано " + count + " ед. номиналом " + cassette.getBanknoteFaceValue() + " руб.}");
+            System.out.println("{выдано " + count + " ед. номиналом " + cassette.getBanknoteNominal() + " руб.}");
         } catch (WithdrawException e) {
             e.printStackTrace();
         }
