@@ -11,7 +11,4 @@ public interface UserDao {
     User save(User user);
 
     User findByName(String name);
-
-    void deleteUserByName(String name);
-
 }

@@ -1,4 +1,4 @@
-package servlet;
+package server.servlet;
 
 import model.User;
 import DbService.UserDao;
@@ -26,21 +26,13 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("users", userDao.getUsers());
-        resp.setContentType("text/html;charset=utf-8");
-        resp.getWriter().println(templateProcessor.getPage(USER_PAGE_TEMPLATE, pageVariables));
-        resp.setStatus(HttpServletResponse.SC_OK);
+        getResponseWithAllUsers(resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         userDao.save(new User(req.getParameter("name"), req.getParameter("password")));
-        Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("users", userDao.getUsers());
-        resp.setContentType("text/html;charset=utf-8");
-        resp.getWriter().println(templateProcessor.getPage(USER_PAGE_TEMPLATE, pageVariables));
-        resp.setStatus(HttpServletResponse.SC_OK);
+        getResponseWithAllUsers(resp);
     }
 
     @Override
@@ -48,9 +40,7 @@ public class UserServlet extends HttpServlet {
 
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        userDao.deleteUserByName(req.getParameter("name"));
+    private void getResponseWithAllUsers(HttpServletResponse resp) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("users", userDao.getUsers());
         resp.setContentType("text/html;charset=utf-8");

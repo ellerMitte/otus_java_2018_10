@@ -33,8 +33,4 @@ public class InMemoryUserDao implements UserDao {
         return users.get(name);
     }
 
-    @Override
-    public void deleteUserByName(String name) {
-        users.remove(name);
-    }
 }

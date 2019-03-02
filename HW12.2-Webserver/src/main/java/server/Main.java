@@ -1,9 +1,7 @@
 package server;
 
 import DbService.UserDaoHibImpl;
-import filter.AuthFilter;
-import DbService.InMemoryUserDao;
-import model.UserService;
+import server.filter.AuthFilter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -11,8 +9,8 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
-import servlet.AdminServlet;
-import servlet.UserServlet;
+import server.servlet.AdminServlet;
+import server.servlet.UserServlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +37,7 @@ public class Main {
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.addServlet(new ServletHolder(new AdminServlet(new UserService(new UserDaoHibImpl()))), "/admin");
+        context.addServlet(new ServletHolder(new AdminServlet()), "/admin");
         context.addServlet(new ServletHolder(new UserServlet(new UserDaoHibImpl())), "/admin/user");
         context.addFilter(new FilterHolder(new AuthFilter()), "/admin/*", null);
 

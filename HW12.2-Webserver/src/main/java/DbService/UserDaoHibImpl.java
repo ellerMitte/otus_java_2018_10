@@ -28,7 +28,7 @@ public class UserDaoHibImpl implements UserDao {
                 .addAnnotatedClass(User.class)
                 .getMetadataBuilder()
                 .build();
-
+//
         sessionFactory = metadata.getSessionFactoryBuilder().build();
     }
 
@@ -55,13 +55,8 @@ public class UserDaoHibImpl implements UserDao {
     @Override
     public User findByName(String name) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             return session.get(User.class, name);
         }
     }
-
-    @Override
-    public void deleteUserByName(String name) {
-
-    }
-
 }

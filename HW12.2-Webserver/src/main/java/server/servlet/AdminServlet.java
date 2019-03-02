@@ -1,15 +1,10 @@
-package servlet;
+package server.servlet;
 
-import model.UserService;
 import server.TemplateProcessor;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +16,9 @@ public class AdminServlet extends HttpServlet {
     private static final int EXPIRE_INTERVAL = 60;
 
     private final TemplateProcessor templateProcessor;
-    private final UserService userService;
 
-    public AdminServlet(UserService userService) throws IOException {
+    public AdminServlet() throws IOException {
         this.templateProcessor = new TemplateProcessor();
-        this.userService = userService;
     }
 
     @Override
@@ -43,7 +36,7 @@ public class AdminServlet extends HttpServlet {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        if (userService.authenticateAdmin(name, password)) {
+        if (authenticateAdmin(name, password)) {
             HttpSession session = request.getSession();
             session.setAttribute("name", name);
             session.setMaxInactiveInterval(EXPIRE_INTERVAL);
@@ -59,5 +52,9 @@ public class AdminServlet extends HttpServlet {
             out.println("Either user name or password is wrong.");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
+    }
+
+    private boolean authenticateAdmin(String name, String password) {
+        return "admin".equals(name) && "admin".equals(password);
     }
 }
