@@ -14,6 +14,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
     //Надо реализовать эти методы
     private static final String ACTION_PUT = "put";
     private static final String ACTION_REMOVE = "remove";
+    private static final String ACTION_GET = "get";
 
     private final HashMap<K, SoftReference<V>> elements = new HashMap<>();
     private List<HwListener> listeners = new ArrayList<>();
@@ -21,7 +22,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void put(K key, V value) {
         elements.put(key, new SoftReference<>(value));
-        notifyAll(key, value, ACTION_PUT);
+        notifyAllListeners(key, value, ACTION_PUT);
     }
 
     @Override
@@ -29,14 +30,17 @@ public class MyCache<K, V> implements HwCache<K, V> {
         SoftReference<V> ref = elements.get(key);
         if (ref != null) {
             elements.remove(key);
-            notifyAll(key, ref.get(), ACTION_REMOVE);
+            notifyAllListeners(key, ref.get(), ACTION_REMOVE);
         }
     }
 
     @Override
     public V get(K key) {
         Optional<SoftReference<V>> optional = Optional.ofNullable(elements.get(key));
-        return optional.map(SoftReference::get).orElse(null);
+        return optional.map(ref -> {
+            notifyAllListeners(key, ref.get(), ACTION_GET);
+            return ref.get();
+        }).orElse(null);
     }
 
     @Override
@@ -49,7 +53,13 @@ public class MyCache<K, V> implements HwCache<K, V> {
         listeners.remove(listener);
     }
 
-    private void notifyAll(K key, V value, String action) {
-        listeners.forEach(listener -> listener.notify(key, value, action));
+    private void notifyAllListeners(K key, V value, String action) {
+        listeners.forEach(listener -> {
+            try {
+                listener.notify(key, value, action);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        });
     }
 }
