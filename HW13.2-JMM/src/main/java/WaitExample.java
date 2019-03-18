@@ -1,11 +1,11 @@
 /**
  * @author Igor on 13.03.19.
  */
-public class SynchExample {
+public class WaitExample {
     private volatile String thr = "t2";
 
     public static void main(String[] args) {
-        SynchExample exercise = new SynchExample();
+        WaitExample exercise = new WaitExample();
         new Thread(() -> exercise.action("t1")).start();
         new Thread(() -> exercise.action("t2")).start();
     }
@@ -15,15 +15,24 @@ public class SynchExample {
         int i = 1;
         StringBuilder sb = new StringBuilder(message + ":");
         while (true) {
-            synchronized (this) {
-                if (!thr.equals(message)) {
-                    inc = (i == 10 || i == 1) != inc;
-                    sb.append(" ").append(inc ? i++ : i--);
-                    System.out.println(sb.toString());
-                    thr = message;
-                    sleep(1000);
-                }
+            if (thr.equals(message)) {
+                wait(this);
+            } else {
+                inc = (i == 10 || i == 1) != inc;
+                sb.append(" ").append(inc ? i++ : i--);
+                System.out.println(sb.toString());
+                thr = message;
+                sleep(1000);
+                notifyAll();
             }
+        }
+    }
+
+    private static void wait(Object object) {
+        try {
+            object.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
