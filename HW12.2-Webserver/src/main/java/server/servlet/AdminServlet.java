@@ -17,8 +17,8 @@ public class AdminServlet extends HttpServlet {
 
     private final TemplateProcessor templateProcessor;
 
-    public AdminServlet() throws IOException {
-        this.templateProcessor = new TemplateProcessor();
+    public AdminServlet(TemplateProcessor templateProcessor) {
+        this.templateProcessor = templateProcessor;
     }
 
     @Override
@@ -37,13 +37,9 @@ public class AdminServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         if (authenticateAdmin(name, password)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("name", name);
-            session.setMaxInactiveInterval(EXPIRE_INTERVAL);
-            Cookie cookie = new Cookie("name", name);
-            cookie.setMaxAge(EXPIRE_INTERVAL);
+            setSession(request, name);
+            setCookie(response, name);
             Map<String, Object> pageVariables = new HashMap<>();
-            response.addCookie(cookie);
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
             response.setStatus(HttpServletResponse.SC_OK);
@@ -52,6 +48,19 @@ public class AdminServlet extends HttpServlet {
             out.println("Either user name or password is wrong.");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
+    }
+
+    private void setSession(HttpServletRequest request, String name) {
+        HttpSession session = request.getSession();
+        session.setAttribute("name", name);
+        session.setMaxInactiveInterval(EXPIRE_INTERVAL);
+    }
+
+    private void setCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie("name", name);
+        cookie.setMaxAge(EXPIRE_INTERVAL);
+        response.addCookie(cookie);
+
     }
 
     private boolean authenticateAdmin(String name, String password) {

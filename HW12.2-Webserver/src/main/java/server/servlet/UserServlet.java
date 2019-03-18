@@ -16,12 +16,13 @@ import java.util.Map;
  */
 public class UserServlet extends HttpServlet {
     private static final String USER_PAGE_TEMPLATE = "user.html";
+
     private final TemplateProcessor templateProcessor;
     private final UserDao userDao;
 
-    public UserServlet(UserDao userDao) throws IOException {
+    public UserServlet(TemplateProcessor templateProcessor, UserDao userDao) {
         this.userDao = userDao;
-        this.templateProcessor = new TemplateProcessor();
+        this.templateProcessor = templateProcessor;
     }
 
     @Override
