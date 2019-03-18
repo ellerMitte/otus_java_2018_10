@@ -2,7 +2,7 @@
  * @author Igor on 13.03.19.
  */
 public class SynchExample {
-    private static String thr = "t2";
+    private String thr = "t2";
 
     public static void main(String[] args) {
         SynchExample exercise = new SynchExample();
