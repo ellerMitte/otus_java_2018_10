@@ -18,7 +18,7 @@
             <img class="responsive-img" th:src="@{image/otus.svg}">
             HW 14.2 - DI</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <a class="waves-effect waves-light" href="/logout">
+            <a class="waves-effect waves-light" th:href="@{logout}">
                 <i class="material-icons right">exit_to_app</i>
             </a>
         </ul>
@@ -44,12 +44,12 @@
                                 <td>{{userForm.id}}</td>
                             </tr>
                             <tr>
-                                <td>Фамилия</td>
-                                <td><input type="text" ng-model="userForm.surname"/></td>
-                            </tr>
-                            <tr>
                                 <td>Имя</td>
                                 <td><input type="text" ng-model="userForm.name"/></td>
+                            </tr>
+                            <tr>
+                                <td>Фамилия</td>
+                                <td><input type="text" ng-model="userForm.surname"/></td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -69,16 +69,16 @@
     <table border="1">
         <tr>
             <th>#</th>
-            <th>Фамилия</th>
             <th>Имя</th>
+            <th>Фамилия</th>
             <th></th>
             <th></th>
         </tr>
         <!-- $scope.users -->
         <tr ng-repeat="user in users">
             <td> {{ user.id }}</td>
-            <td> {{ user.surname }}</td>
             <td> {{ user.name }}</td>
+            <td> {{ user.surname }}</td>
             <td>
                 <button data-target="modal1" class="btn-floating modal-trigger btn-small waves-effect waves-light">
                     <i ng-click="editUser(user)" class="small material-icons">edit</i>

@@ -18,10 +18,10 @@ app.controller("UserController", function ($scope, $http) {
 
         if ($scope.userForm.id == null) {
             method = "POST";
-            url = '/users';
+            url = 'users';
         } else {
             method = "PUT";
-            url = '/users';
+            url = 'users';
         }
 
         $http({
@@ -37,7 +37,7 @@ app.controller("UserController", function ($scope, $http) {
     $scope.deleteUser = function (user) {
         $http({
             method: 'DELETE',
-            url: '/users/' + user.id
+            url: 'users/' + user.id
         }).then(_success, _error);
     };
 
@@ -50,7 +50,7 @@ app.controller("UserController", function ($scope, $http) {
     function _refreshUserData() {
         $http({
             method: 'GET',
-            url: '/users'
+            url: 'users'
         }).then(
             function (res) { // success
                 $scope.users = res.data;

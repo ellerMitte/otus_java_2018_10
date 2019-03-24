@@ -113,7 +113,7 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>src/main/resources</directory>
+                            <directory>src/main/webapp</directory>
                         </resource>
                     </webResources>
                 </configuration>

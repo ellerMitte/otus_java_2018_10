@@ -19,14 +19,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser(User.withDefaultPasswordEncoder().username("user").password("1").roles("USER"));
+                .withUser(User.withDefaultPasswordEncoder().username("user").password("user").roles("USER"));
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/users/**").hasRole("USER")
+                .antMatchers("users/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
