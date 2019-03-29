@@ -1,9 +1,9 @@
-package ru.otus.messageSystem.messages;
+package ru.otus.app.messages;
 
-import ru.otus.messageSystem.FrontendService;
-import ru.otus.messageSystem.entity.Address;
-import ru.otus.messageSystem.entity.Addressee;
-import ru.otus.messageSystem.entity.Message;
+import ru.otus.app.context.FrontendService;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.Addressee;
+import ru.otus.messageSystem.Message;
 
 public abstract class MsgToFrontend extends Message {
     public MsgToFrontend(Address from, Address to) {
@@ -14,8 +14,6 @@ public abstract class MsgToFrontend extends Message {
     public void exec(Addressee addressee) {
         if (addressee instanceof FrontendService) {
             exec((FrontendService) addressee);
-        } else {
-            //todo error!
         }
     }
 

@@ -1,4 +1,4 @@
-package ru.otus.messageSystem.entity;
+package ru.otus.messageSystem;
 
 import org.springframework.stereotype.Service;
 
@@ -13,20 +13,16 @@ import java.util.logging.Logger;
 @Service
 public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
-    private static final int DEFAULT_STEP_TIME = 10;
 
     private final List<Thread> workers;
     private final Map<Address, LinkedBlockingQueue<Message>> messagesMap;
-//    private final Map<Address, Addressee> addresseeMap;
 
     public MessageSystem() {
         workers = new ArrayList<>();
         messagesMap = new HashMap<>();
-//        addresseeMap = new HashMap<>();
     }
 
     public void addAddressee(Addressee addressee) {
-//        addresseeMap.put(addressee.getAddress(), addressee);
         messagesMap.put(addressee.getAddress(), new LinkedBlockingQueue<>());
         start(addressee.getAddress(), addressee);
     }
@@ -37,8 +33,6 @@ public final class MessageSystem {
 
 
     public void start(Address address, Addressee addressee) {
-//        for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
-//        Addressee addressee = addresseeMap.get(address);
         String name = "MS-worker-" + address.getId();
         Thread thread = new Thread(() -> {
             LinkedBlockingQueue<Message> queue = messagesMap.get(address);
@@ -55,7 +49,6 @@ public final class MessageSystem {
         thread.setName(name);
         thread.start();
         workers.add(thread);
-//        }
     }
 
     public void dispose() {

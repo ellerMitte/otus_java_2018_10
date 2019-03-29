@@ -4,7 +4,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import ru.otus.frontend.domain.WSMsg;
-import ru.otus.messageSystem.FrontendService;
+import ru.otus.app.context.FrontendService;
 
 @Controller
 public class WSController {
@@ -15,27 +15,25 @@ public class WSController {
         this.frontendService = frontendService;
     }
 
-    @MessageMapping("/connect")
+    @MessageMapping({"/connect","/message"})
     @SendTo("/topic/response")
-    public void getConnect(WSMsg message) {
-        frontendService.getUsers();
-    }
-
-    @MessageMapping("/message")
-    @SendTo("/topic/response")
-    public void getMessage(WSMsg message) {
+    public void getUsers() {
         frontendService.getUsers();
     }
 
     @MessageMapping("/save")
     @SendTo("/topic/response")
     public void saveUser(WSMsg message) {
-        frontendService.saveUser(message.getUser());
+        if (message.getUser() != null) {
+            frontendService.saveUser(message.getUser());
+        }
     }
 
     @MessageMapping("/delete")
     @SendTo("/topic/response")
     public void deleteUser(WSMsg message) {
-        frontendService.deleteUser(message.getUser());
+        if (message.getUser() != null) {
+            frontendService.deleteUser(message.getUser());
+        }
     }
 }

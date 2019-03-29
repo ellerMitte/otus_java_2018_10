@@ -1,7 +1,7 @@
-package ru.otus.messageSystem;
+package ru.otus.app.context;
 
 import ru.otus.domain.User;
-import ru.otus.messageSystem.entity.Addressee;
+import ru.otus.messageSystem.Addressee;
 
 import java.util.List;
 

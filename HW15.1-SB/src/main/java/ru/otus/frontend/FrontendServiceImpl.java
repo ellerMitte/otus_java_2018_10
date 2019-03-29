@@ -4,14 +4,14 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import ru.otus.domain.User;
 import ru.otus.frontend.domain.WSMsg;
-import ru.otus.messageSystem.FrontendService;
-import ru.otus.messageSystem.MessageSystemContext;
-import ru.otus.messageSystem.entity.Address;
-import ru.otus.messageSystem.entity.Message;
-import ru.otus.messageSystem.entity.MessageSystem;
-import ru.otus.messageSystem.messages.MsgDeleteUser;
-import ru.otus.messageSystem.messages.MsgSaveUser;
-import ru.otus.messageSystem.messages.MsgGetUsers;
+import ru.otus.app.context.FrontendService;
+import ru.otus.app.context.MessageSystemContext;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.Message;
+import ru.otus.messageSystem.MessageSystem;
+import ru.otus.app.messages.MsgDeleteUser;
+import ru.otus.app.messages.MsgSaveUser;
+import ru.otus.app.messages.MsgGetUsers;
 
 import java.util.List;
 

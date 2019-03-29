@@ -3,29 +3,33 @@ function WsCtrl($scope) {
     vm.users = [];
 
     angular.element('.modal').modal();
+    setConnect();
 
-    function setConnected(connected) {
-        angular.element("#connect").toggleClass("disabled")
-        angular.element("#disconnect").toggleClass("disabled")
+    function setConnectedElements() {
+        angular.element(".manipulate").toggleClass("disabled");
     }
 
-    vm.connectWs = function () {
+    function setConnect() {
         stompClient = Stomp.over(new SockJS('/hw-ms-websocket'));
         stompClient.connect({}, function (frame) {
-            setConnected(true);
+            setConnectedElements();
             sendConnect();
             console.log('connected: ' + frame);
             stompClient.subscribe('/topic/response', function (msg) {
-                vm.revertUsers(JSON.parse(msg.body).users)
+                vm.setUsers(JSON.parse(msg.body).users)
             });
         });
+    }
+
+    vm.connectWs = function () {
+        setConnect();
     };
 
     function sendConnect() {
         stompClient.send("/app/connect", {}, JSON.stringify({'method': 'connect'}));
     }
 
-    vm.submitUser = function() {
+    vm.submitUser = function () {
         stompClient.send("/app/save", {}, JSON.stringify({'user': $scope.userForm}));
         _clearFormData();
     };
@@ -40,22 +44,18 @@ function WsCtrl($scope) {
         if (stompClient !== null) {
             stompClient.disconnect();
         }
-        setConnected(false);
+        setConnectedElements();
         console.log("Disconnected");
-    };
-
-    vm.sendMsg = function sendMsg() {
-        stompClient.send("/app/message", {}, JSON.stringify({'method': 'get'}));
     };
 
     vm.deleteUser = function (user, index) {
         stompClient.send("/app/delete", {}, JSON.stringify({'user': user}));
     };
 
-    vm.revertUsers = function (users) {
+    vm.setUsers = function (users) {
         vm.users = users;
         $scope.$apply();
-    }
+    };
 
     function _clearFormData() {
         $scope.userForm.id = null;
@@ -67,7 +67,3 @@ function WsCtrl($scope) {
 angular
     .module('UserWsApp', [])
     .controller('WsCtrl', WsCtrl);
-
-function init_modal() {
-    angular.element('.modal').modal();
-}

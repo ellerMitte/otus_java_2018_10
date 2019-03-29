@@ -1,4 +1,4 @@
-package ru.otus.messageSystem.entity;
+package ru.otus.messageSystem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

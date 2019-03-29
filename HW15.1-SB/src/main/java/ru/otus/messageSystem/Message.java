@@ -1,4 +1,4 @@
-package ru.otus.messageSystem.entity;
+package ru.otus.messageSystem;
 
 public abstract class Message {
     private final Address from;

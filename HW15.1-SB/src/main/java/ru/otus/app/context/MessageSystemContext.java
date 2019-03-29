@@ -1,8 +1,8 @@
-package ru.otus.messageSystem;
+package ru.otus.app.context;
 
 import org.springframework.stereotype.Service;
-import ru.otus.messageSystem.entity.Address;
-import ru.otus.messageSystem.entity.MessageSystem;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.MessageSystem;
 
 @Service
 public class MessageSystemContext {

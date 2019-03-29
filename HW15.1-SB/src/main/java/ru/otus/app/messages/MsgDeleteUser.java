@@ -1,8 +1,8 @@
-package ru.otus.messageSystem.messages;
+package ru.otus.app.messages;
 
 import ru.otus.domain.User;
-import ru.otus.messageSystem.DbService;
-import ru.otus.messageSystem.entity.Address;
+import ru.otus.app.context.DbService;
+import ru.otus.messageSystem.Address;
 
 public class MsgDeleteUser extends MsgToDB {
 

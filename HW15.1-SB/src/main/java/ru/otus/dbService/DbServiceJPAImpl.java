@@ -1,12 +1,12 @@
 package ru.otus.dbService;
 
 import org.springframework.stereotype.Service;
+import ru.otus.app.context.DbService;
+import ru.otus.app.context.MessageSystemContext;
 import ru.otus.dbService.jpa.UserRepository;
 import ru.otus.domain.User;
-import ru.otus.messageSystem.DbService;
-import ru.otus.messageSystem.MessageSystemContext;
-import ru.otus.messageSystem.entity.Address;
-import ru.otus.messageSystem.entity.MessageSystem;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.MessageSystem;
 
 import java.util.List;
 
@@ -32,18 +32,8 @@ public class DbServiceJPAImpl implements DbService {
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public List<User> findByName(String name) {
-        return userRepository.findAllByName(name);
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     @Override

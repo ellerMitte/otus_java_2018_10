@@ -1,9 +1,9 @@
-package ru.otus.messageSystem.messages;
+package ru.otus.app.messages;
 
-import ru.otus.messageSystem.DbService;
-import ru.otus.messageSystem.entity.Address;
-import ru.otus.messageSystem.entity.Addressee;
-import ru.otus.messageSystem.entity.Message;
+import ru.otus.app.context.DbService;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.Addressee;
+import ru.otus.messageSystem.Message;
 
 public abstract class MsgToDB extends Message {
     public MsgToDB(Address from, Address to) {
