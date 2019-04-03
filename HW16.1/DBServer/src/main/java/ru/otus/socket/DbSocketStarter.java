@@ -2,13 +2,10 @@ package ru.otus.socket;
 
 import ru.otus.app.Msg;
 import ru.otus.channel.SocketMsgWorker;
-import ru.otus.socket.messages.MsgSaveUser;
 import ru.otus.socket.messages.PingMsg;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Igor on 01.04.19.
@@ -39,9 +36,9 @@ public class DbSocketStarter {
 
         int count = 0;
         while (count < MAX_MESSAGES_COUNT) {
-            Msg msg = new PingMsg();
-            client.send(msg);
-            System.out.println("Message sent: " + msg.toString());
+//            Msg msg = new PingMsg(from, to, body);
+//            client.send(msg);
+//            System.out.println("Message sent: " + msg.toString());
             Thread.sleep(PAUSE_MS);
             count++;
         }

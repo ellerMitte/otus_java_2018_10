@@ -10,6 +10,7 @@ import java.net.Socket;
  */
 public class FrontendMsgWorker extends SocketMsgWorker {
     private final Socket socket;
+    private final String name = "db";
 
     FrontendMsgWorker(String host, int port) throws IOException {
         this(new Socket(host, port));

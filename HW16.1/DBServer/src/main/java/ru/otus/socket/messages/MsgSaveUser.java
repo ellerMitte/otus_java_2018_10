@@ -1,6 +1,7 @@
 package ru.otus.socket.messages;
 
 import ru.otus.app.Msg;
+import ru.otus.app.MsgWorker;
 
 /**
  * @author Igor on 03.04.19.
@@ -8,8 +9,8 @@ import ru.otus.app.Msg;
 public class MsgSaveUser extends Msg {
     private final String COMMAND = "save";
 
-    public MsgSaveUser() {
-        super(MsgSaveUser.class);
+    public MsgSaveUser(MsgWorker from, MsgWorker to, String body) {
+        super(from, to, body, MsgSaveUser.class);
     }
 
     @Override

@@ -36,9 +36,9 @@ public class FrontendSocketStarter {
 
         int count = 0;
         while (count < MAX_MESSAGES_COUNT) {
-            Msg msg = new PingMsg();
-            client.send(msg);
-            System.out.println("frontend sent: " + msg.toString());
+//            Msg msg = new PingMsg(body, from, to);
+//            client.send(msg);
+//            System.out.println("frontend sent: " + msg.toString());
             Thread.sleep(PAUSE_MS);
             count++;
         }

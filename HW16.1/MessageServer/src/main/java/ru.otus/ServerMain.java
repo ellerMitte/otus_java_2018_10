@@ -1,9 +1,11 @@
 package ru.otus;
 
+import ru.otus.app.AddressContext;
 import ru.otus.runner.ProcessRunnerImpl;
 import ru.otus.server.EchoSocketMsgServer;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +18,7 @@ import java.util.logging.Logger;
 public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
-    private static final String CLIENT_START_COMMAND = "java -jar HW16.1/DBServer/target/DBServer-2018-1.jar";
+    private static final String CLIENT_START_COMMAND = "java -jar HW16.1/DBServer/target/DBServer-2018-10.jar";
     private static final int CLIENT_START_DELAY_SEC = 5;
 
     public static void main(String[] args) throws Exception {
@@ -33,6 +35,7 @@ public class ServerMain {
 //        mbs.registerMBean(server, name);
 
         server.start();
+//        server.acceptWorker(socket, AddressContext.DBSERVER);
 
         executorService.shutdown();
     }
