@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import ru.otus.app.Msg;
+import ru.otus.messages.Msg;
 import ru.otus.app.MsgWorker;
+import ru.otus.messages.PingMsg;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,10 +103,15 @@ public class SocketMsgWorker implements MsgWorker {
     }
 
     private static Msg getMsgFromJSON(String json) throws ParseException, ClassNotFoundException {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
-        String className = (String) jsonObject.get(Msg.CLASS_NAME_VARIABLE);
-        Class<?> msgClass = Class.forName("ru.otus.messages." + className);
-        return (Msg) new Gson().fromJson(json, msgClass);
+//        JSONParser jsonParser = new JSONParser();
+//        JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
+//        String className = (String) jsonObject.get(Msg.CLASS_NAME_VARIABLE);
+//        Class<?> msgClass = Class.forName("ru.otus.messages." + className);
+        return new Gson().fromJson(json, PingMsg.class);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return !socket.isClosed();
     }
 }

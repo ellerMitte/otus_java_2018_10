@@ -11,8 +11,8 @@ import java.net.Socket;
 public class DbSocketMsgWorker extends SocketMsgWorker {
     private final Socket socket;
 
-    DbSocketMsgWorker(String host, int port) throws IOException {
-        this(new Socket(host, port));
+    DbSocketMsgWorker(String host, int port, int localport) throws IOException {
+        this(new Socket(host, port, null, localport));
     }
 
     private DbSocketMsgWorker(Socket socket) {

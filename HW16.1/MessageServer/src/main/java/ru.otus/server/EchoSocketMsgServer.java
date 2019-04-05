@@ -1,17 +1,12 @@
 package ru.otus.server;
 
-import ru.otus.app.Address;
-import ru.otus.app.AddressContext;
-import ru.otus.app.Msg;
-import ru.otus.app.MsgWorker;
+import ru.otus.app.*;
 import ru.otus.channel.Blocks;
 import ru.otus.channel.SocketMsgWorker;
+import ru.otus.messages.Msg;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -27,14 +22,14 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
     private static final int PORT = 5050;
     private static final int MIRROR_DELAY_MS = 100;
 
-    private final String name = "server";
+//    private final String name = "server";
 
     private final ExecutorService executor;
-    private final List<Address> workers;
+    private final AddressService workersService;
 
     public EchoSocketMsgServer() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
-        workers = new CopyOnWriteArrayList<>();
+        workersService = new AddressServiceImpl();
     }
 
     @Blocks
@@ -47,37 +42,32 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
                 Socket socket = serverSocket.accept(); //blocks
                 SocketMsgWorker worker = new SocketMsgWorker(socket);
                 worker.init();
-                workers.add(new Address(AddressContext.DBSERVER, worker));
+                workersService.addWorker(Address.getAddress(socket.getPort()), worker);
             }
         }
-    }
-
-    public void acceptWorker(ServerSocket serverSocket, AddressContext address) throws IOException {
-//        if (!executor.isShutdown()) {
-//            Socket socket = serverSocket.accept(); //blocks
-//            SocketMsgWorker worker = new SocketMsgWorker(socket);
-//            worker.init();
-//            workers.add(new Address(address, worker));
-//        }
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
     private void echo() {
         while (true) {
-            for (Address worker : workers) {
-                Msg msg = worker.getWorker().poll();
-                while (msg != null) {
-                    System.out.println("Mirroring the message: " + msg.toString());
-                    msg.getTo().send(msg);
-//                    worker.send(msg);
-                    msg = worker.getWorker().poll();
+            for (MsgWorker worker : workersService.getWorkers()) {
+                if (worker.isConnected()) {
+                    Msg msg = worker.poll();
+                    while (msg != null) {
+                        System.out.println("Mirroring the message: " + msg.toString());
+                        workersService.getWorker(msg.getTo()).send(msg);
+                        msg = worker.poll();
+                    }
+                }
+                else {
+                    workersService.deleteWorker(worker);
                 }
             }
-            try {
-                Thread.sleep(MIRROR_DELAY_MS);
-            } catch (InterruptedException e) {
-                logger.log(Level.SEVERE, e.toString());
-            }
+//            try {
+//                Thread.sleep(MIRROR_DELAY_MS);
+//            } catch (InterruptedException e) {
+//                logger.log(Level.SEVERE, e.toString());
+//            }
         }
     }
 

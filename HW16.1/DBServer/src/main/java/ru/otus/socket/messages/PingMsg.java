@@ -1,16 +1,16 @@
 package ru.otus.socket.messages;
 
-import ru.otus.app.Msg;
-import ru.otus.app.MsgWorker;
+import ru.otus.app.Address;
+import ru.otus.messages.Msg;
 
 /**
  * Created by tully.
  */
-public class PingMsg extends Msg {
+public class PingMsg {
     private final long time;
 
-    public PingMsg(MsgWorker from, MsgWorker to, String body) {
-        super(from, to, body, PingMsg.class);
+    public PingMsg(Address from, Address to, String body) {
+//        super(from, to, body, PingMsg.class);
         time = System.currentTimeMillis();
     }
 
@@ -18,8 +18,8 @@ public class PingMsg extends Msg {
         return time;
     }
 
-    @Override
-    public String toString() {
-        return "ClientPingMsg{" + "time=" + time + '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "ClientPingMsg{" + "time=" + time + '}';
+//    }
 }

@@ -1,5 +1,6 @@
 package ru.otus;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -21,8 +22,14 @@ public class DbServerApplication {
         dbService.save(new User(null, "pettr", "ivanych"));
         dbService.save(new User(null, "stepan", "ivanych"));
         System.out.println(dbService.getUsers());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(dbService.getUsers());
 
-        new DbSocketStarter().start();
+        DbSocketStarter starter = context.getBean(DbSocketStarter.class);
+        starter.init("60100", json);
+//        starter.init(args[0], json);
+
+//        new DbSocketStarter(dbService).start(Integer.valueOf(args[0]), json, dbService);
 
     }
 }

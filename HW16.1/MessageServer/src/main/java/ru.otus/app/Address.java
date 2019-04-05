@@ -1,36 +1,29 @@
 package ru.otus.app;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Arrays;
 
-public final class Address {
-    private final AddressContext id;
-    private final MsgWorker worker;
+public enum Address {
+    FRONTEND(45400, 45500), DBSERVER(60100, 60200);
+    private final int minPort;
+    private final int maxPort;
 
-    public Address(AddressContext id, MsgWorker worker) {
-        this.id = id;
-        this.worker = worker;
+    Address(int minPort, int maxPort) {
+        this.minPort = minPort;
+        this.maxPort = maxPort;
     }
 
-    public MsgWorker getWorker() {
-        return worker;
+    public int getMinPort() {
+        return minPort;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Address address = (Address) o;
-
-        return id != null ? id.equals(address.id) : address.id == null;
+    public int getMaxPort() {
+        return maxPort;
     }
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public AddressContext getId() {
-        return id;
+    public static Address getAddress(int port) {
+        return Arrays.stream(Address.values())
+                .filter(address -> port >= address.getMinPort() && port < address.getMaxPort())
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -1,11 +1,10 @@
 package ru.otus;
 
-import ru.otus.app.AddressContext;
+import ru.otus.app.Address;
 import ru.otus.runner.ProcessRunnerImpl;
 import ru.otus.server.EchoSocketMsgServer;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +17,8 @@ import java.util.logging.Logger;
 public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
-    private static final String CLIENT_START_COMMAND = "java -jar HW16.1/DBServer/target/DBServer-2018-10.jar";
+    private static final String DBSERVER_START_COMMAND = "java -jar HW16.1/DBServer/target/DBServer-2018-1.jar";
+    private static final String FRONTEND_START_COMMAND = "java -jar HW16.1/Frontend/target/Frontend-2018-1.jar";
     private static final int CLIENT_START_DELAY_SEC = 5;
 
     public static void main(String[] args) throws Exception {
@@ -27,7 +27,8 @@ public class ServerMain {
 
     private void start() throws Exception {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        startClient(executorService);
+        startClient(executorService, DBSERVER_START_COMMAND + " " + Address.DBSERVER.getMinPort());
+        startClient(executorService, FRONTEND_START_COMMAND + " " + Address.FRONTEND.getMinPort());
 
 //        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 //        ObjectName name = new ObjectName("ru.otus:type=Server");
@@ -40,10 +41,10 @@ public class ServerMain {
         executorService.shutdown();
     }
 
-    private void startClient(ScheduledExecutorService executorService) {
+    private void startClient(ScheduledExecutorService executorService, String command) {
         executorService.schedule(() -> {
             try {
-                new ProcessRunnerImpl().start(CLIENT_START_COMMAND);
+                new ProcessRunnerImpl().start(command);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage());
             }
