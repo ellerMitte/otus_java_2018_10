@@ -1,5 +1,7 @@
 package ru.otus.app;
 
+import ru.otus.messages.Msg;
+
 import java.util.List;
 
 /**
@@ -13,4 +15,6 @@ public interface AddressService {
     List<MsgWorker> getWorkers();
 
     void deleteWorker(MsgWorker worker);
+
+    void sendMessage(Msg msg);
 }

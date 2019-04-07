@@ -2,14 +2,13 @@ package ru.otus.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
 import ru.otus.app.Address;
-import ru.otus.domain.User;
 import ru.otus.messages.Msg;
 import ru.otus.channel.SocketMsgWorker;
 import ru.otus.messages.PingMsg;
 import ru.otus.service.DbService;
+import ru.otus.service.command.DbCommand;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,7 +40,7 @@ public class DbSocketStarter {
                 while (true) {
                     Msg msg = client.take();
                     System.out.println("Message received: " + msg.toString());
-                    saveUser(msg);
+                    execute(msg);
                     ObjectMapper mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(dbService.getUsers());
                     msg = new PingMsg(Address.DBSERVER, Address.FRONTEND, "all", json);
@@ -55,11 +54,12 @@ public class DbSocketStarter {
 //        executorService.shutdown();
     }
 
-    private void saveUser(Msg msg) {
-        if ("save".equals(msg.getCommand())) {
-            User user = new Gson().fromJson(msg.getBody(), User.class);
-            dbService.save(user);
+    private void execute(Msg msg) {
+        try {
+            DbCommand dbCommand = (DbCommand) Class.forName("ru.otus.service.command." + msg.getCommand()).newInstance();
+            dbCommand.exec(dbService, msg.getBody());
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
-
 }

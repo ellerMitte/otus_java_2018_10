@@ -1,5 +1,7 @@
 package ru.otus.app;
 
+import ru.otus.messages.Msg;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,5 +42,10 @@ public final class AddressServiceImpl implements AddressService {
     public void deleteWorker(MsgWorker worker) {
         worker.close();
         workers.forEach((address, msgWorkers) -> msgWorkers.remove(worker));
+    }
+
+    @Override
+    public void sendMessage(Msg msg) {
+        workers.get(msg.getTo()).forEach(msgWorker -> msgWorker.send(msg));
     }
 }

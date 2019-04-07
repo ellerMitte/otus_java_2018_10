@@ -26,17 +26,17 @@ public class FrontendServiceImpl implements FrontendService {
 
     @Override
     public void saveUser(User user) {
-        msSocketService.sendMessage("save", toJson(user));
+        msSocketService.sendMessage("SaveUser", toJson(user));
     }
 
     @Override
     public void deleteUser(User user) {
-        msSocketService.sendMessage("delete", user.toString());
+        msSocketService.sendMessage("DeleteUser", user.getId().toString());
     }
 
     @Override
     public void getUsers() {
-        msSocketService.sendMessage("get", "all");
+        msSocketService.sendMessage("GetUsers", "all");
     }
 
     @Override

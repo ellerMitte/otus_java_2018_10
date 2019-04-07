@@ -55,7 +55,8 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
                     Msg msg = worker.poll();
                     while (msg != null) {
                         System.out.println("Mirroring the message: " + msg.toString());
-                        workersService.getWorker(msg.getTo()).send(msg);
+//                        workersService.getWorker(msg.getTo()).send(msg);
+                        workersService.sendMessage(msg);
                         msg = worker.poll();
                     }
                 }
