@@ -1,7 +1,5 @@
 package ru.otus.runner;
 
-import ru.otus.app.ProcessRunner;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +8,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
 public class ProcessRunnerImpl implements ProcessRunner {
     private final StringBuffer out = new StringBuffer();
     private Process process;
-    //private boolean isStarted = false;
 
     public void start(String command) throws IOException {
         process = runProcess(command);

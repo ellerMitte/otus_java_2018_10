@@ -1,4 +1,4 @@
-package ru.otus.config;
+package ru.otus.service;
 
 import ru.otus.domain.User;
 

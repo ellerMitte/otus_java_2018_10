@@ -1,7 +1,9 @@
 package ru.otus.server;
 
-import ru.otus.app.*;
-import ru.otus.channel.Blocks;
+import ru.otus.app.Address;
+import ru.otus.app.AddressService;
+import ru.otus.app.AddressServiceImpl;
+import ru.otus.channel.MsgWorker;
 import ru.otus.channel.SocketMsgWorker;
 import ru.otus.messages.Msg;
 
@@ -9,30 +11,25 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
-public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
-    private static final Logger logger = Logger.getLogger(EchoSocketMsgServer.class.getName());
+public class SocketMsgServer {
+    private static final Logger logger = Logger.getLogger(SocketMsgServer.class.getName());
 
     private static final int THREADS_NUMBER = 1;
     private static final int PORT = 5050;
-    private static final int MIRROR_DELAY_MS = 100;
-
-//    private final String name = "server";
 
     private final ExecutorService executor;
     private final AddressService workersService;
 
-    public EchoSocketMsgServer() {
+    public SocketMsgServer() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
         workersService = new AddressServiceImpl();
     }
 
-    @Blocks
     public void start() throws Exception {
         executor.submit(this::echo);
 
@@ -54,9 +51,7 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
                 if (worker.isConnected()) {
                     Msg msg = worker.poll();
                     while (msg != null) {
-                        System.out.println("Mirroring the message: " + msg.toString());
-//                        workersService.getWorker(msg.getTo()).send(msg);
-                        workersService.sendMessage(msg);
+                        workersService.sendMessage(worker, msg);
                         msg = worker.poll();
                     }
                 }
@@ -64,24 +59,6 @@ public class EchoSocketMsgServer implements EchoSocketMsgServerMBean {
                     workersService.deleteWorker(worker);
                 }
             }
-//            try {
-//                Thread.sleep(MIRROR_DELAY_MS);
-//            } catch (InterruptedException e) {
-//                logger.log(Level.SEVERE, e.toString());
-//            }
-        }
-    }
-
-    @Override
-    public boolean getRunning() {
-        return true;
-    }
-
-    @Override
-    public void setRunning(boolean running) {
-        if (!running) {
-            executor.shutdown();
-            logger.info("Bye.");
         }
     }
 }

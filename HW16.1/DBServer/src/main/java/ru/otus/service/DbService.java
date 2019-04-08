@@ -10,5 +10,5 @@ public interface DbService {
 
     void save(User user);
 
-    void deleteUser(Long id);
+    void deleteUser(User user);
 }

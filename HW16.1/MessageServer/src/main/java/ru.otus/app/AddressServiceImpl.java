@@ -1,11 +1,9 @@
 package ru.otus.app;
 
+import ru.otus.channel.MsgWorker;
 import ru.otus.messages.Msg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class AddressServiceImpl implements AddressService {
@@ -17,16 +15,6 @@ public final class AddressServiceImpl implements AddressService {
         workers.put(Address.DBSERVER, new CopyOnWriteArrayList<>());
     }
 
-    @Override
-    public MsgWorker getWorker(Address address) {
-        List<MsgWorker> workerList = workers.get(address);
-        if (workerList.size() > 0) {
-            return workerList.get(0);
-        }
-        return null;
-    }
-
-    @Override
     public void addWorker(Address address, MsgWorker worker) {
         workers.get(address).add(worker);
     }
@@ -45,7 +33,17 @@ public final class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void sendMessage(Msg msg) {
-        workers.get(msg.getTo()).forEach(msgWorker -> msgWorker.send(msg));
+    public void sendMessage(MsgWorker thisWorker, Msg msg) {
+        if (msg.getFrom() == Address.FRONTEND && msg.getTo() == Address.DBSERVER) {
+            workers.get(Address.DBSERVER).stream()
+                    .min(Comparator.comparingInt(MsgWorker::getInputSize))
+                    .ifPresent(msgWorker -> msgWorker.send(msg));
+        } else {
+            workers.get(msg.getTo()).forEach(msgWorker -> {
+                if (msgWorker != thisWorker) {
+                    msgWorker.send(msg);
+                }
+            });
+        }
     }
 }

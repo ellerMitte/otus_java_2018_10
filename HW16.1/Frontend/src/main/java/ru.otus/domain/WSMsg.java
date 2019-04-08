@@ -1,7 +1,6 @@
 package ru.otus.domain;
 
 import lombok.*;
-import ru.otus.domain.User;
 
 import java.util.List;
 

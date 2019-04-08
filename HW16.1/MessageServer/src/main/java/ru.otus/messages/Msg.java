@@ -1,20 +1,18 @@
 package ru.otus.messages;
 
 import ru.otus.app.Address;
+import ru.otus.app.Commands;
 
 /**
  * Created by igor
  */
-public abstract class Msg {
+public class Msg {
     private final Address from;
     private final Address to;
-    private final String command;
+    private final Commands command;
     private final String body;
-//    public static final String CLASS_NAME_VARIABLE = "className";
 
-//    private final String className;
-
-    protected Msg(Address from, Address to,String command, String body) {
+    public Msg(Address from, Address to,Commands command, String body) {
         this.from = from;
         this.to = to;
         this.body = body;
@@ -29,7 +27,7 @@ public abstract class Msg {
         return to;
     }
 
-    public String getCommand() {
+    public Commands getCommand() {
         return command;
     }
 
@@ -42,8 +40,8 @@ public abstract class Msg {
         return "Msg{" +
                 "from=" + from +
                 ", to=" + to +
+                ", command=" + command +
                 ", body='" + body + '\'' +
-                ", command='" + command + '\'' +
                 '}';
     }
 }

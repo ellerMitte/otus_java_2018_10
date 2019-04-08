@@ -47,7 +47,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.l161.ServerMain</mainClass>
+                            <mainClass>ru.otus.ServerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

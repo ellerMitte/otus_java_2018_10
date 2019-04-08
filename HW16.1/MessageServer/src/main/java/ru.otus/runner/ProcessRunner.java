@@ -1,9 +1,9 @@
-package ru.otus.app;
+package ru.otus.runner;
 
 import java.io.IOException;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
 public interface ProcessRunner {
     void start(String command) throws IOException;

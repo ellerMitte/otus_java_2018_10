@@ -3,7 +3,7 @@ package ru.otus.controllers;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import ru.otus.config.FrontendService;
+import ru.otus.service.FrontendService;
 import ru.otus.domain.WSMsg;
 
 @Controller

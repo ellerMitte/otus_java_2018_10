@@ -1,12 +1,7 @@
 package ru.otus.channel;
 
 import com.google.gson.Gson;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import ru.otus.messages.Msg;
-import ru.otus.app.MsgWorker;
-import ru.otus.messages.PingMsg;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
 public class SocketMsgWorker implements MsgWorker {
     private static final Logger logger = Logger.getLogger(SocketMsgWorker.class.getName());
@@ -63,7 +58,6 @@ public class SocketMsgWorker implements MsgWorker {
         executor.execute(this::receiveMessage);
     }
 
-    @Blocks
     private void sendMessage() {
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             while (socket.isConnected()) {
@@ -77,41 +71,38 @@ public class SocketMsgWorker implements MsgWorker {
         }
     }
 
-    @Blocks
     private void receiveMessage() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String inputLine;
             StringBuilder stringBuilder = new StringBuilder();
             while ((inputLine = in.readLine()) != null) { //blocks
-                //System.out.println("Message received: " + inputLine);
                 stringBuilder.append(inputLine);
                 if (inputLine.isEmpty()) { //empty line is the end of the message
                     String json = stringBuilder.toString();
-                    System.out.println(json);
+//                    System.out.println(json);
                     Msg msg = getMsgFromJSON(json);
                     input.add(msg);
                     stringBuilder = new StringBuilder();
                 }
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } finally {
             close();
         }
     }
 
-    private static Msg getMsgFromJSON(String json) throws ParseException, ClassNotFoundException {
-//        JSONParser jsonParser = new JSONParser();
-//        JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
-//        String className = (String) jsonObject.get(Msg.CLASS_NAME_VARIABLE);
-//        Class<?> msgClass = Class.forName("ru.otus.messages." + className);
-        return new Gson().fromJson(json, PingMsg.class);
+    private static Msg getMsgFromJSON(String json) {
+        return new Gson().fromJson(json, Msg.class);
     }
 
     @Override
     public boolean isConnected() {
         return !socket.isClosed();
+    }
+
+    @Override
+    public int getInputSize() {
+        return input.size();
     }
 }

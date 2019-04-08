@@ -29,8 +29,8 @@ public class DbServiceJPAImpl implements DbService {
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.findById(id).ifPresent(userRepository::delete);
+    public void deleteUser(User user) {
+        userRepository.findById(user.getId()).ifPresent(userRepository::delete);
     }
 
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html ng-app="UserWsApp" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Otus HW 15.1</title>
+    <title>Otus HW 16.1</title>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -19,7 +19,7 @@
         <div class="nav-wrapper">
             <a href="#" class="brand-logo center">
                 <img class="responsive-img" th:src="@{image/otus.svg}">
-                HW 15.1 - MS</a>
+                HW 16.1 - MS</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <a class="btn-floating btn-small waves-effect waves-light manipulate">
                     <i ng-click="main.connectWs()" class="material-icons">sync</i>
@@ -40,21 +40,18 @@
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <form ng-submit="main.submitUser()" enctype="multipart/form-data">
+                    <input type="hidden" ng-model="main.userForm.id"/>
                     <span class="card-title">Введите имя и фамилию пользователя</span>
                     <div class="card">
                         <div class="card-content">
                             <table border="0">
                                 <tr>
-                                    <td>№</td>
-                                    <td>{{userForm.id}}</td>
-                                </tr>
-                                <tr>
                                     <td>Имя</td>
-                                    <td><input type="text" ng-model="userForm.name"/></td>
+                                    <td><input type="text" ng-model="main.userForm.name"/></td>
                                 </tr>
                                 <tr>
                                     <td>Фамилия</td>
-                                    <td><input type="text" ng-model="userForm.surname"/></td>
+                                    <td><input type="text" ng-model="main.userForm.surname"/></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
@@ -73,7 +70,6 @@
         <br/>
         <table border="1">
             <tr>
-                <th>#</th>
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th></th>
@@ -81,7 +77,6 @@
             </tr>
             <!-- $scope.users -->
             <tr ng-repeat="user in main.users">
-                <td> {{ user.id }}</td>
                 <td> {{ user.name }}</td>
                 <td> {{ user.surname }}</td>
                 <td>
@@ -92,7 +87,7 @@
                 </td>
                 <td>
                     <a class="btn-floating btn-small waves-effect waves-light manipulate">
-                        <i ng-click="main.deleteUser(user, $index)" class="small material-icons">delete</i>
+                        <i ng-click="main.deleteUser(user)" class="small material-icons">delete</i>
                     </a>
                 </td>
             </tr>

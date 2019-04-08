@@ -2,7 +2,7 @@ package ru.otus;
 
 import ru.otus.app.Address;
 import ru.otus.runner.ProcessRunnerImpl;
-import ru.otus.server.EchoSocketMsgServer;
+import ru.otus.server.SocketMsgServer;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -12,13 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
 public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
-    private static final String DBSERVER_START_COMMAND = "java -jar HW16.1/DBServer/target/DBServer-2018-1.jar";
-    private static final String FRONTEND_START_COMMAND = "java -jar HW16.1/Frontend/target/Frontend-2018-1.jar";
+    private static final String DBSERVER_START_COMMAND = "java -jar ../DBServer/target/DBServer-2018-10.jar";
+    private static final String FRONTEND_START_COMMAND = "java -jar ../Frontend/target/Frontend-2018-10.jar";
+    private static final String FRONTEND_SERVER_PORT_COMMAND = " --server.port=";
     private static final int CLIENT_START_DELAY_SEC = 5;
 
     public static void main(String[] args) throws Exception {
@@ -28,15 +29,15 @@ public class ServerMain {
     private void start() throws Exception {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         startClient(executorService, DBSERVER_START_COMMAND + " " + Address.DBSERVER.getMinPort());
-        startClient(executorService, FRONTEND_START_COMMAND + " " + Address.FRONTEND.getMinPort());
+        startClient(executorService, DBSERVER_START_COMMAND + " " + (Address.DBSERVER.getMinPort() + 1));
+        startClient(executorService, FRONTEND_START_COMMAND + " "
+                + Address.FRONTEND.getMinPort() + FRONTEND_SERVER_PORT_COMMAND + "8080");
+        startClient(executorService, FRONTEND_START_COMMAND + " "
+                + (Address.FRONTEND.getMinPort() + 1) + FRONTEND_SERVER_PORT_COMMAND + "8090");
 
-//        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-//        ObjectName name = new ObjectName("ru.otus:type=Server");
-        EchoSocketMsgServer server = new EchoSocketMsgServer();
-//        mbs.registerMBean(server, name);
+        SocketMsgServer server = new SocketMsgServer();
 
         server.start();
-//        server.acceptWorker(socket, AddressContext.DBSERVER);
 
         executorService.shutdown();
     }

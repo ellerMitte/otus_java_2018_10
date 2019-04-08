@@ -2,6 +2,8 @@ package ru.otus.domain;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
@@ -9,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class User {
 
-    private Long id;
+    private UUID id;
     private String name;
     private String surname;
 }

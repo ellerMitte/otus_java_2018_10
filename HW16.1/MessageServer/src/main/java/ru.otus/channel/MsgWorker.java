@@ -1,22 +1,22 @@
-package ru.otus.app;
+package ru.otus.channel;
 
-import ru.otus.channel.Blocks;
 import ru.otus.messages.Msg;
 
 import java.io.Closeable;
 
 /**
- * Created by tully.
+ * Created by igor.
  */
 public interface MsgWorker extends Closeable {
     void send(Msg msg);
 
     Msg poll();
 
-    @Blocks
     Msg take() throws InterruptedException;
 
     void close();
 
     boolean isConnected();
+
+    int getInputSize();
 }

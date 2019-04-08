@@ -1,8 +1,20 @@
 function WsCtrl($scope) {
     var vm = this;
     vm.users = [];
+    vm.userForm = {
+        id: null,
+        surname: "",
+        name: ""
+    };
 
-    angular.element('.modal').modal();
+    angular.element('.modal').modal(
+        {
+            onCloseEnd: function() {
+                _clearFormData();
+                $scope.$apply();
+            }
+        }
+    );
     setConnect();
 
     function setConnectedElements() {
@@ -30,14 +42,14 @@ function WsCtrl($scope) {
     }
 
     vm.submitUser = function () {
-        stompClient.send("/app/save", {}, JSON.stringify({'user': $scope.userForm}));
-        _clearFormData();
+        stompClient.send("/app/save", {}, JSON.stringify({'user': vm.userForm}));
+        // _clearFormData();
     };
 
     vm.editUser = function (user) {
-        $scope.userForm.id = user.id;
-        $scope.userForm.surname = user.surname;
-        $scope.userForm.name = user.name;
+        vm.userForm.id = user.id;
+        vm.userForm.surname = user.surname;
+        vm.userForm.name = user.name;
     };
 
     vm.disconnectWs = function () {
@@ -48,7 +60,7 @@ function WsCtrl($scope) {
         console.log("Disconnected");
     };
 
-    vm.deleteUser = function (user, index) {
+    vm.deleteUser = function (user) {
         stompClient.send("/app/delete", {}, JSON.stringify({'user': user}));
     };
 
@@ -58,9 +70,9 @@ function WsCtrl($scope) {
     };
 
     function _clearFormData() {
-        $scope.userForm.id = null;
-        $scope.userForm.surname = "";
-        $scope.userForm.name = ""
+        vm.userForm.id = null;
+        vm.userForm.surname = "";
+        vm.userForm.name = "";
     }
 }
 
