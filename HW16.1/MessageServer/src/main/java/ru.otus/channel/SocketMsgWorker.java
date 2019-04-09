@@ -102,7 +102,7 @@ public class SocketMsgWorker implements MsgWorker {
     }
 
     @Override
-    public int getInputSize() {
-        return input.size();
+    public int getOutputSize() {
+        return output.size();
     }
 }

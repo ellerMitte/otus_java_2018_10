@@ -18,5 +18,5 @@ public interface MsgWorker extends Closeable {
 
     boolean isConnected();
 
-    int getInputSize();
+    int getOutputSize();
 }
