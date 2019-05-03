@@ -4,18 +4,3 @@
 
 ### Преподаватели
 Sergey Petrelevich (Сергей Петрелевич)
-
-petrelevich@yandex.ru
-
-
-Vitaly Chibrikov (Виталий Чибриков)
-
-chibrikov@otus.ru
-
-
-#### Студент
-
-Игорь Затрубщиков
-
-eller_mitte@mail.ru
-
